@@ -1,0 +1,11 @@
+{% extends 'post/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="content">
+          {% for tag in tags %}
+          <h1 style="font-size: 60px" class="title">
+            {{ tag.title }}
+          </h1>
+          {% endfor %}
+  </div>
+{% endblock %}
