@@ -27,7 +27,10 @@ class Tag(models.Model):
         return '{}'.format(self.title)
 
     def get_absolute_url(self):
-        return reverse('', kwargs={'pk': self.pk})
+        return reverse('tag_detail_url', kwargs={'pk': self.pk})
+
+
+
 # Если юзер удалит картинку, то в хранилище она тоже удалится
 # @receiver(post_delete, sender=Post)
 # def submission_delete(sender, instance):
