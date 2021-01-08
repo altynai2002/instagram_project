@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Insta</title>
+    <link rel="icon" href="{% static 'img/instagram_black.png' %}">
+    <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+  </head>
+  <body>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div style="padding-left: 32%; display: flex;">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://bulma.io">
+      <img src="{% static 'img/instagram_black.png' %}" width="30" height="63">
+    </a>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a href="{% url 'post_list' %}" class="navbar-item">
+        <i class="material-icons">home</i>
+      </a>
+
+      <a class="navbar-item">
+        <i class="material-icons">explore</i>
+      </a>
+      <a href="{% url 'add_post' %}" class="navbar-item">
+      <i class="material-icons">add_circle_outline</i>
+      </a>
+      <a class="navbar-item">
+        <i class="material-icons">notifications</i>
+      </a>
+      <a class="navbar-item">
+        <i class="material-icons">inbox</i>
+      </a>
+      <a href="" class="navbar-item">
+        <i class="material-icons">face</i>
+      </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Settings
+        </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item">
+            Change password
+          </a>
+          <a class="navbar-item">
+            Contact
+          </a>
+          <a class="navbar-item">
+            Report an issue
+          </a>
+          <hr class="navbar-divider">
+          <a class="navbar-item">
+            Log out
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</nav>
+  <section class="section">
+    <div class="container">
+      <div class="columns is-mobile is-centered">
+      <div class="column is-half">
+        {% block content %}
+        {% endblock%}
+      </div>
+      </div>
+    </div>
+ <br>
+  </section>
+  </body>
+</html>
