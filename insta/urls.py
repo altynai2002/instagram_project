@@ -1,3 +1,4 @@
+from django.urls import path, include
 """insta URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -20,5 +21,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('post.urls'))
+    path('', include('post.urls')),
+    path('account/', include('account.urls')),
+    path('accounts/', include('django.contrib.auth.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
