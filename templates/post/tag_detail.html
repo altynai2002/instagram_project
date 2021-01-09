@@ -1,9 +1,17 @@
-{% extends 'post/base.html' %}
+{% extends 'includes/base.html' %}
+
+{% block title %}
+    {{ tag.title }} - {{ block.super }}
+{% endblock %}
 
 {% block content %}
-  {% for post in posts %}
-    <div class="card">
+    <h1 class="mb-5 has-text-info is-size-3 mx-6">
+        Post with '{{ tag.title|title }}' tag:
+    </h1>
+    {% for post in tag.posts.all %}
+        <div class="card">
       <div class="media p-3 mb-0">
+          <div class="is-flex-direction-row" style="display: flex;">
             <div class="media-left">
               <figure class="image is-48x48">
                 <img class="is-rounded" src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
@@ -15,7 +23,8 @@
                 <p class="title is-4">{{ post.author }}</p>
                 <p class="subtitle is-7">Bishkek</p>
               </div>
-              <div class="navbar-item has-dropdown is-hoverable" style="float: right; align-item: flex-end;">
+            </div>
+              <div class="navbar-item has-dropdown is-hoverable" style="margin-left:12rem;">
                 <a class="navbar"><i class="material-icons">more_vert</i></a>
 
                 <p class="navbar-dropdown">
@@ -58,5 +67,5 @@
         </div>
       </div>
       <br>
-  {% endfor %}
+    {% endfor %}
 {% endblock %}

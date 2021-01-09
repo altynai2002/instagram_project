@@ -14,7 +14,7 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div style="padding-left: 32%; display: flex;">
   <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
+    <a class="navbar-item" href="{% url 'post_list' %}">
       <img src="{% static 'img/instagram_black.png' %}" width="30" height="63">
     </a>
 
@@ -27,14 +27,15 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-      <a href="{% url 'post_list' %}" class="navbar-item">
+<!--      {% url 'post_list' %}-->
+      <a href="" class="navbar-item">
         <i class="material-icons">home</i>
       </a>
 
       <a class="navbar-item">
         <i class="material-icons">explore</i>
       </a>
-      <a href="{% url 'add_post' %}" class="navbar-item">
+      <a href="{% url 'add_post'  %}" class="navbar-item">
       <i class="material-icons">add_circle_outline</i>
       </a>
       <a class="navbar-item">
@@ -50,34 +51,44 @@
         <a class="navbar-link">
           Settings
         </a>
-
+        {% if request.user.is_authenticated %}
         <div class="navbar-dropdown">
-          <a class="navbar-item">
+          <a href="{% url 'change_password' %}" class="navbar-item">
             Change password
           </a>
           <a class="navbar-item">
             Contact
           </a>
-          <a class="navbar-item">
-            Report an issue
-          </a>
+<!--          <a class="navbar-item">-->
+<!--            Report an issue-->
+<!--          </a>-->
           <hr class="navbar-divider">
-          <a class="navbar-item">
+          <a href="{% url 'logout' %}" class="navbar-item">
             Log out
           </a>
+          {% else %}
+          <a class="navbar-item">
+            Log in
+          </a>
+          <a class="navbar-item">
+            Sign in
+          </a>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
   </div>
 </nav>
+  {% block banner %}
+  {% endblock banner %}
   <section class="section">
     <div class="container">
       <div class="columns is-mobile is-centered">
-      <div class="column is-half">
+<!--      <div class="column is-half">-->
         {% block content %}
         {% endblock%}
-      </div>
+<!--      </div>-->
       </div>
     </div>
  <br>

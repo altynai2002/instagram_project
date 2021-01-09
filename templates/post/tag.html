@@ -1,0 +1,42 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block banner %}
+  <div class="columns is-mobile is-centered">
+      <div class="column is-half">
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container">
+      <h1 style="font-size: 20px;" class="title">
+        Tag - #{{ tag.title }}
+      </h1>
+    </div>
+  </div>
+</section>
+{% endblock %}
+</div>
+
+
+{% block content %}
+
+ <div class="columns is-mobile is-multiline is-centered">
+
+
+{% for post in posts %}
+<!--     <div class="column is-half">-->
+      <div class="column is-multiline">
+      <div class="column">
+        <div class="box">
+      <figure class="image is-256x256">
+        <a href="{{ post.get_absolute_url }}"><img src="{{ post.image.url }}" alt="Image"></a>
+      </figure>
+    </div>
+      </div></div>
+<br>
+
+{% endfor %}
+
+
+{% endblock %}
+
+</div>
