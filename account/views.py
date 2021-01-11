@@ -24,13 +24,13 @@ def UserProfile(request, username):
     url_name = resolve(request.path).url_name
 
     if url_name == 'profile':
-        posts = Post.objects.filter(user=user).order_by('-posted')
+        posts = Post.objects.filter(author=user).order_by('-created_date')
 
     else:
         posts = profile.favorites.all()
 
     # Profile info box
-    posts_count = Post.objects.filter(user=user).count()
+    posts_count = Post.objects.filter(author=user).count()
     following_count = Follow.objects.filter(follower=user).count()
     followers_count = Follow.objects.filter(following=user).count()
 
@@ -42,8 +42,6 @@ def UserProfile(request, username):
     page_number = request.GET.get('page')
     posts_paginator = paginator.get_page(page_number)
 
-    template = loader.get_template('account/profile.html')
-
     context = {
         'posts': posts_paginator,
         'profile': profile,
@@ -54,7 +52,7 @@ def UserProfile(request, username):
         'url_name': url_name,
     }
 
-    return HttpResponse(template.render(context, request))
+    return render(request, template_name='post/profile.html', context=context)
 
 
 def UserProfileFavorites(request, username):
@@ -94,7 +92,7 @@ def Signup(request):
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
             User.objects.create_user(username=username, email=email, password=password)
-            return redirect('post_list')
+            return redirect('edit-profile')
     else:
         form = SignupForm()
 
@@ -134,7 +132,7 @@ def PasswordChangeDone(request):
 def EditProfile(request):
     user = request.user.id
     profile = Profile.objects.get(user__id=user)
-    BASE_WIDTH = 400
+    BASE_WIDTH = 300
 
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES)
@@ -146,7 +144,7 @@ def EditProfile(request):
             profile.url = form.cleaned_data.get('url')
             profile.profile_info = form.cleaned_data.get('profile_info')
             profile.save()
-            return redirect('index')
+            return redirect('post_list')
     else:
         form = EditProfileForm()
 
@@ -168,11 +166,11 @@ def follow(request, username, option):
             f.delete()
             Stream.objects.filter(following=following, user=request.user).all().delete()
         else:
-            posts = Post.objects.all().filter(user=following)[:25]
+            posts = Post.objects.all().filter(author=following)[:25]
 
             with transaction.atomic():
                 for post in posts:
-                    stream = Stream(post=post, user=request.user, date=post.posted, following=following)
+                    stream = Stream(post=post, user=request.user, date=post.created_date, following=following)
                     stream.save()
 
         return HttpResponseRedirect(reverse('profile', args=[username]))

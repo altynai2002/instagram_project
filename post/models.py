@@ -19,13 +19,9 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
     tags = models.ManyToManyField('Tag', related_name='posts', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
-    # slug = models.SlugField(unique=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
-
-    # def __str__(self):
-    #     return self.str(self.id)
 
 class Tag(models.Model):
     title = models.CharField(max_length=50)
