@@ -1,7 +1,6 @@
 {% extends 'includes/base.html' %}
 {% load static %}
 
-
 {% block content %}
 
 <article class="media">
@@ -86,9 +85,9 @@
       <a href="{% url 'profile' profile.user %}"><i class="material-icons">dashboard</i>Posts</a>
     </li>
 
-    <li class="{% if url_name == 'profilefavorites' %}is-active{% endif %}">
-      <a href="{% url 'profilefavorites' profile.user %}"><i class="material-icons">save_alt</i>Saved</a>
-    </li>
+<!--    <li class="{% if url_name == 'profilefavorites' %}is-active{% endif %}">-->
+<!--      <a href="{% url 'profilefavorites' profile.user %}"><i class="material-icons">save_alt</i>Saved</a>-->
+<!--    </li>-->
   </ul>
 </div>
 
@@ -108,8 +107,8 @@
   {% else %}
     <a href="{{ post.get_absolute_url }}">
       <video width="640" controls="controls" preload="metadata">
-        <source src="{{ post.content.first.file.url }}#t=0.5" type="video/mp4">        
-      </video>      
+        <source src="{{ post.content.first.file.url }}#t=0.5" type="video/mp4">
+      </video>
     </a>
   {% endif %}
 

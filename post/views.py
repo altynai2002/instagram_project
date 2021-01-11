@@ -1,10 +1,13 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
-from .forms import PostForm, AddPostForm, UpdatePostForm
+
+from comment.forms import CommentForm
+from comment.models import Comment
+from .forms import AddPostForm, UpdatePostForm
 from .models import Post, Tag, Stream, Likes
 
 
@@ -19,7 +22,6 @@ def index(request):
         group_ids.append(post.post_id)
 
     post_items = Post.objects.filter(id__in=group_ids).all().order_by('-created_date')
-
     return render(request, template_name='post/post_list.html', context={'post_items': post_items})
 
 @login_required(login_url='login')
@@ -37,10 +39,42 @@ def add_post(request):
     return render(request, 'post/post_create.html', context={'form': form})
 
 @login_required(login_url='login')
+def update_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    form = UpdatePostForm(instance=post)
+
+    if request.method == "POST":
+        form = UpdatePostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect("post_list")
+
+    return render(request, "post/post_update.html", {'form': form})
+
+@login_required(login_url='login')
+def delete_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    post.delete()
+    return redirect("post_list")
+
+@login_required(login_url='login')
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    user = request.user
 
-    return render(request, 'post/post_detail.html', context={'post': post})
+    comments = Comment.objects.filter(post=post).order_by('date')
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = user
+            comment.save()
+            return HttpResponseRedirect(reverse('post_detail', args=[post_id]))
+    else:
+        form = CommentForm()
+
+    return render(request, 'post/post_detail.html', context={'post': post, 'form': form, 'comments':comments})
 
 @login_required(login_url='login')
 def tags(request, tag_slug):
@@ -67,36 +101,11 @@ def like(request, post_id):
     post.likes = current_likes
     post.save()
 
-    return HttpResponseRedirect(reverse('post_detail', args=[post_id]))
+    return HttpResponseRedirect(reverse('post_list'))
 
-
-
-#
-# class ViewsMixin:
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['post_form'] = self.get_form(self.get_form_class())
-#         return context
-#
-#     def get_success_url(self):
-#         return self.object.get_absolute_url()
-#
-# class UpdatePostView(ViewsMixin, UpdateView):
-#     model = Post
-#     template_name = 'post/post_update.html'
-#     form_class = UpdatePostForm
-#
-# class DeletePostView(DeleteView):
-#     model = Post
-#     template_name = 'post/post_delete.html'
-#     success_url = reverse_lazy('post_list')
-#
-# def tags_list(request):
-#     tags = Tag.objects.all()
-#     return render(request, 'post/tag.html', context={'tags': tags})
-#
-# def tag_detail(request, slug):
-#     tag = Tag.objects.get(slug__iexact=slug)
-#     return render(request, 'post/tag_detail.html', context={'tag': tag})
-#
+# def searcher(request):
+#     if request.method == 'GET':
+#         search = request.GET.get('search')
+#         user = User.objects.all().filter(username=search)
+#         return render(request, 'post/searchbar.html', {'user': user})
 #
